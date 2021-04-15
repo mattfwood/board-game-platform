@@ -6,6 +6,7 @@ import { TicTacToeBoard } from '../components/Board';
 import { useEffect, useState } from 'react';
 import { LobbyClient } from 'boardgame.io/client';
 import { useAsync } from '../hooks/useAsync';
+import React from 'react';
 
 const lobbyClient = new LobbyClient({ server: 'http://localhost:8000' });
 
