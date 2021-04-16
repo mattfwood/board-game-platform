@@ -1,4 +1,4 @@
-const Router = require('@koa/router');
+// const Router = require('@koa/router');
 // const { createServer } = require('http');
 const next = require('next');
 const { Server } = require('boardgame.io/server');
@@ -19,10 +19,9 @@ app.prepare().then(() => {
   // const router = new Router();
   const { router, app } = gameServer;
 
-  router.all('/multiplayer', async ctx => {
-    console.log(ctx);
-    ctx.respond = false;
-  });
+  // router.all('/multiplayer', async (ctx) => {
+  //   ctx.respond = false;
+  // });
 
   router.all('(.*)', async (ctx) => {
     await handle(ctx.req, ctx.res);
