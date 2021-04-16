@@ -11,6 +11,7 @@ import React from 'react';
 type LoginFormProps = {
   playerName?: string;
   onEnter: (playerName: string) => void;
+  onCancel: () => void;
 };
 
 type LoginFormState = {
@@ -32,17 +33,20 @@ class LobbyLoginForm extends React.Component<LoginFormProps, LoginFormState> {
     return (
       <div>
         <p className="phase-title">Choose a player name:</p>
-        <input
-          type="text"
-          value={this.state.playerName}
-          onChange={this.onChangePlayerName}
-          onKeyPress={this.onKeyPress}
-        />
-        <span className="buttons">
+        <div className="flex space-x-2">
+          <input
+            type="text"
+            value={this.state.playerName}
+            onChange={this.onChangePlayerName}
+            onKeyPress={this.onKeyPress}
+          />
           <button className="buttons" onClick={this.onClickEnter}>
             Enter
           </button>
-        </span>
+          <button className="btn-secondary" onClick={this.props.onCancel}>
+            Cancel
+          </button>
+        </div>
         <br />
         <span className="error-msg">
           {this.state.nameErrorMsg}

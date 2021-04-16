@@ -9,7 +9,6 @@ enum STATUS {
 
 // https://usehooks.com/useAsync/
 export const useAsync = (asyncFunction, immediate = true) => {
-  console.log(asyncFunction);
   const [status, setStatus] = useState<STATUS>(STATUS.idle);
   const [value, setValue] = useState(null);
   const [error, setError] = useState(null);

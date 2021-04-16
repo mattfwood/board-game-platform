@@ -74,13 +74,67 @@ class LobbyCreateMatchForm extends React.Component<
   render() {
     return (
       <div>
-        <select
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            this.onClickCreate();
+          }}
+        >
+          <div className="shadow sm:rounded-md sm:overflow-hidden">
+            <div className="bg-white py-6 px-4 space-y-6 sm:p-6">
+              <div>
+                <h3 className="text-lg leading-6 font-medium text-gray-900">
+                  Create a Match
+                </h3>
+                {/* <p className="mt-1 text-sm text-gray-500">
+                  Provide basic informtion about the job. Be specific with the job title.
+                </p> */}
+              </div>
+
+              <fieldset>
+                <legend className="text-base font-medium text-gray-900">
+                  Game Type
+                </legend>
+                <select
+                  className="mt-4 block w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  value={this.state.selectedGame}
+                  onChange={(evt) => this.onChangeSelectedGame(evt)}
+                >
+                  {this.props.games.map(this._createGameNameOption)}
+                </select>
+              </fieldset>
+              <fieldset className="mt-6">
+                <legend className="text-base font-medium text-gray-900">
+                  Player Count
+                </legend>
+                <select
+                  className="mt-4"
+                  value={this.state.numPlayers}
+                  onChange={this.onChangeNumPlayers}
+                >
+                  {this._createNumPlayersRange(
+                    this.props.games[this.state.selectedGame].game
+                  ).map(this._createNumPlayersOption)}
+                </select>
+              </fieldset>
+            </div>
+            <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
+              <button
+                type="submit"
+                className="bg-indigo-600 border border-transparent rounded-md shadow-sm py-2 px-4 inline-flex justify-center text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600"
+              >
+                Create Game
+              </button>
+            </div>
+          </div>
+        </form>
+        {/* <select
           value={this.state.selectedGame}
           onChange={(evt) => this.onChangeSelectedGame(evt)}
         >
           {this.props.games.map(this._createGameNameOption)}
-        </select>
-        <span>Players:</span>
+        </select> */}
+        {/* <span>Players:</span>
         <select
           value={this.state.numPlayers}
           onChange={this.onChangeNumPlayers}
@@ -88,10 +142,10 @@ class LobbyCreateMatchForm extends React.Component<
           {this._createNumPlayersRange(
             this.props.games[this.state.selectedGame].game
           ).map(this._createNumPlayersOption)}
-        </select>
-        <span className="buttons">
+        </select> */}
+        {/* <span className="buttons">
           <button onClick={this.onClickCreate}>Create</button>
-        </span>
+        </span> */}
       </div>
     );
   }

@@ -1,13 +1,13 @@
 import Cookies from 'react-cookies';
 import PropTypes from 'prop-types';
-import { Game, LobbyAPI } from "boardgame.io";
-import { SocketIO } from 'boardgame.io/multiplayer'
+import { Game, LobbyAPI } from 'boardgame.io';
+import { SocketIO } from 'boardgame.io/multiplayer';
 // import { Client } from "boardgame.io/dist/types/packages/client";
-import { Local } from "boardgame.io/dist/types/packages/multiplayer";
-import { DebugOpt } from "boardgame.io/dist/types/src/client/client";
+import { Local } from 'boardgame.io/dist/types/packages/multiplayer';
+import { DebugOpt } from 'boardgame.io/dist/types/src/client/client';
 // import { GameComponent, LobbyConnection } from "boardgame.io/dist/types/src/lobby/connection";
 // import  { MatchOpts } from "boardgame.io/dist/types/src/lobby/match-instance";
-import React, { ComponentType } from "react";
+import React, { ComponentType } from 'react';
 import LobbyLoginForm from './LobbyLoginForm';
 import LobbyCreateMatchForm from './LobbyCreateMatchForm';
 import { Client } from 'boardgame.io/react';
@@ -77,6 +77,7 @@ type LobbyState = {
   runningMatch?: RunningMatch;
   errorMsg: string;
   credentialStore?: { [playerName: string]: string };
+  showLoginForm: boolean;
 };
 
 /**
@@ -119,6 +120,7 @@ export class Lobby extends React.Component<LobbyProps, LobbyState> {
     runningMatch: null,
     errorMsg: '',
     credentialStore: {},
+    showLoginForm: false,
   };
 
   private connection?: ReturnType<typeof LobbyConnection>;
@@ -325,19 +327,77 @@ export class Lobby extends React.Component<LobbyProps, LobbyState> {
 
     return (
       <div id="lobby-view" style={{ padding: 50 }}>
-        <div className={this._getPhaseVisibility(LobbyPhases.ENTER)}>
+        {/* <div className={this._getPhaseVisibility(LobbyPhases.ENTER)}> */}
+        {/* <div>
           <LobbyLoginForm
             key={playerName}
             playerName={playerName}
             onEnter={this._enterLobby}
           />
-        </div>
+        </div> */}
 
         <div className={this._getPhaseVisibility(LobbyPhases.LIST)}>
           <p>Welcome, {playerName}</p>
+          <section aria-labelledby="profile-overview-title" className="mb-4">
+            <div className="rounded-lg bg-white overflow-hidden shadow">
+              <h2 className="sr-only" id="profile-overview-title">
+                Profile Overview
+              </h2>
+              <div className="bg-white p-6">
+                {this.state.showLoginForm ? (
+                  <LobbyLoginForm
+                    onCancel={() => this.setState({ showLoginForm: false })}
+                    key={playerName}
+                    playerName={playerName}
+                    onEnter={(name) => {
+                      this.setState({ showLoginForm: false });
+                      this._enterLobby(name);
+                    }}
+                  />
+                ) : (
+                  <div className="sm:flex sm:items-center sm:justify-between">
+                    <div className="sm:flex sm:space-x-5">
+                      {/* <div className="flex-shrink-0">
+                          <img className="mx-auto h-20 w-20 rounded-full" src={user.imageUrl} alt="" />
+                        </div> */}
+
+                      <div className="mt-4 text-center sm:mt-0 sm:pt-1 sm:text-left">
+                        <p className="text-sm font-medium text-gray-600">
+                          Welcome back,
+                        </p>
+                        <p className="text-xl font-bold text-gray-900 sm:text-2xl">
+                          {playerName}
+                        </p>
+                        {/* <p className="text-sm font-medium text-gray-600">{user.role}</p> */}
+                      </div>
+                    </div>
+                    <div className="mt-5 flex justify-center sm:mt-0">
+                      <button
+                        onClick={() =>
+                          this.setState({
+                            showLoginForm: !this.state.showLoginForm as boolean,
+                          })
+                        }
+                        className="flex justify-center items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+                      >
+                        Change Name
+                      </button>
+                    </div>
+                  </div>
+                )}
+                {/* {this.state.showLoginForm && (
+              <LobbyLoginForm
+              key={playerName}
+              playerName={playerName}
+              onEnter={this._enterLobby}
+            />
+
+            )} */}
+              </div>
+            </div>
+          </section>
 
           <div className="phase-title" id="match-creation">
-            <span>Create a match:</span>
             <LobbyCreateMatchForm
               games={gameComponents}
               createMatch={this._createMatch}
