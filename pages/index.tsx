@@ -1,12 +1,12 @@
 import Link from 'next/link'
-import { Client, Lobby } from 'boardgame.io/react';
+import { Client } from 'boardgame.io/react';
 import { SocketIO } from 'boardgame.io/multiplayer'
 import { TicTacToe } from '../lib/Game';
 import { TicTacToeBoard } from '../components/Board';
-import { useEffect, useState } from 'react';
 import { LobbyClient } from 'boardgame.io/client';
 import { useAsync } from '../hooks/useAsync';
 import React from 'react';
+import { Lobby } from '../components/Lobby';
 
 const lobbyClient = new LobbyClient({ server: 'http://localhost:8000' });
 
@@ -52,7 +52,7 @@ class App extends React.Component {
 export default function Home() {
   const result = useLobby();
 
-  console.log(result);
+  // console.log(result);
   return (
     <div>
       <Lobby

@@ -1,23 +1,21 @@
-import React from 'react';
+import React, { CSSProperties } from 'react';
 
-export class TicTacToeBoard extends React.Component {
-  onClick(id) {
-    this.props.moves.clickCell(id);
+export function TicTacToeBoard(props) {
+  function onClick(id) {
+    props.moves.clickCell(id);
   }
 
-  render() {
-    console.log(this.props)
-    let winner = '';
-    if (this.props.ctx.gameover) {
+  let winner: unknown = '';
+    if (props.ctx.gameover) {
       winner =
-        this.props.ctx.gameover.winner !== undefined ? (
-          <div id="winner">Winner: {this.props.ctx.gameover.winner}</div>
+        props.ctx.gameover.winner !== undefined ? (
+          <div id="winner">Winner: {props.ctx.gameover.winner}</div>
         ) : (
           <div id="winner">Draw!</div>
         );
     }
 
-    const cellStyle = {
+    const cellStyle: CSSProperties = {
       border: '1px solid #555',
       width: '50px',
       height: '50px',
@@ -47,5 +45,5 @@ export class TicTacToeBoard extends React.Component {
         {winner}
       </div>
     );
-  }
 }
+
