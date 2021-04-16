@@ -11,7 +11,7 @@ import { Lobby } from '../components/Lobby';
 const isDev = process.env.NODE_ENV !== 'production';
 const HOST = isDev
   ? 'http://localhost:8000'
-  : 'https://board-game-platform.herokuapp.com';
+  : 'hhttps://board-game-backend.herokuapp.com';
 
 const lobbyClient = new LobbyClient({ server: HOST });
 
