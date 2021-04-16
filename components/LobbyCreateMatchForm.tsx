@@ -43,6 +43,7 @@ class LobbyCreateMatchForm extends React.Component<
       if (!matchDetails.maxPlayers) {
         matchDetails.maxPlayers = 4;
       }
+      // eslint-disable-next-line
       console.assert(matchDetails.maxPlayers >= matchDetails.minPlayers);
     }
     this.state = {
@@ -68,6 +69,7 @@ class LobbyCreateMatchForm extends React.Component<
   };
 
   _createNumPlayersRange = (game: Game) => {
+    // @ts-ignore
     return [...new Array(game.maxPlayers + 1).keys()].slice(game.minPlayers);
   };
 
