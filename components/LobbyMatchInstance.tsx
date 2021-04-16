@@ -112,7 +112,9 @@ class LobbyMatchInstance extends React.Component<MatchInstanceProps> {
     }
     return (
       <tr key={'line-' + match.matchID}>
-        <td key={'cell-name-' + match.matchID}>{match.gameName}</td>
+        <td key={'cell-name-' + match.matchID}>
+          {match.gameName} #{match.matchID}
+        </td>
         <td key={'cell-status-' + match.matchID}>{status}</td>
         <td key={'cell-seats-' + match.matchID}>
           {match.players.map(this._createSeat).join(', ')}

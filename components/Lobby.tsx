@@ -327,14 +327,14 @@ export class Lobby extends React.Component<LobbyProps, LobbyState> {
 
     return (
       <div id="lobby-view" style={{ padding: 50 }}>
-        {/* <div className={this._getPhaseVisibility(LobbyPhases.ENTER)}> */}
-        {/* <div>
+        <div className={this._getPhaseVisibility(LobbyPhases.ENTER)}>
           <LobbyLoginForm
+            // onCancel={() => {}}
             key={playerName}
             playerName={playerName}
             onEnter={this._enterLobby}
           />
-        </div> */}
+        </div>
 
         <div className={this._getPhaseVisibility(LobbyPhases.LIST)}>
           <p>Welcome, {playerName}</p>

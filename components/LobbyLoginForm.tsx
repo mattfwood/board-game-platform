@@ -11,7 +11,7 @@ import React from 'react';
 type LoginFormProps = {
   playerName?: string;
   onEnter: (playerName: string) => void;
-  onCancel: () => void;
+  onCancel?: () => void;
 };
 
 type LoginFormState = {
@@ -43,9 +43,11 @@ class LobbyLoginForm extends React.Component<LoginFormProps, LoginFormState> {
           <button className="buttons" onClick={this.onClickEnter}>
             Enter
           </button>
-          <button className="btn-secondary" onClick={this.props.onCancel}>
-            Cancel
-          </button>
+          {Boolean(this.props.onCancel) && (
+            <button className="btn-secondary" onClick={this.props.onCancel}>
+              Cancel
+            </button>
+          )}
         </div>
         <br />
         <span className="error-msg">
