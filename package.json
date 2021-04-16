@@ -2,9 +2,9 @@
   "name": "custom-server",
   "version": "1.0.0",
   "scripts": {
-    "dev": "node -r esm server.js",
+    "dev": "next",
     "build": "next build",
-    "start": "cross-env NODE_ENV=production node -r esm server.js",
+    "start": "cross-env NODE_ENV=production next start",
     "lint": "eslint --cache \"**/*.js\" --fix"
   },
   "dependencies": {
