@@ -8,6 +8,7 @@
     "lint": "eslint --cache \"**/*.js\" --fix"
   },
   "dependencies": {
+    "@koa/router": "^10.0.0",
     "@tailwindcss/forms": "^0.3.2",
     "@typescript-eslint/eslint-plugin": "^4.22.0",
     "@typescript-eslint/parser": "^4.22.0",
