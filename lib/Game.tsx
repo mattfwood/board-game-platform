@@ -1,3 +1,4 @@
+import { Game } from 'boardgame.io';
 import { INVALID_MOVE } from 'boardgame.io/core';
 
 // Return true if `cells` is in a winning configuration.
@@ -26,8 +27,10 @@ function IsDraw(cells) {
   return cells.filter((c) => c === null).length === 0;
 }
 
-export const TicTacToe = {
+export const TicTacToe: Game = {
   name: 'TicTacToe',
+  minPlayers: 2,
+  maxPlayers: 2,
   setup: () => ({ cells: new Array(9).fill(null) }),
 
   turn: {

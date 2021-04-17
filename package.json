@@ -5,7 +5,8 @@
     "dev": "next",
     "build": "next build",
     "start": "cross-env NODE_ENV=production next start -p $PORT",
-    "lint": "eslint --cache \"**/*.js\" --fix"
+    "lint": "eslint --cache \"**/*.js\" --fix",
+    "server": "npx ts-node -O '{\"module\":\"commonjs\"}' server.ts"
   },
   "dependencies": {
     "@koa/router": "^10.0.0",
@@ -17,10 +18,12 @@
     "esm": "^3.2.25",
     "next": "latest",
     "prop-types": "^15.7.2",
-    "react": "^16.13.1",
+    "react": "^17.0.2",
     "react-cookies": "^0.1.1",
-    "react-dom": "^16.13.1",
-    "recoil": "^0.2.0"
+    "react-dom": "^17.0.2",
+    "recoil": "^0.2.0",
+    "ts-node": "^9.1.1",
+    "uuid": "^8.3.2"
   },
   "license": "MIT",
   "devDependencies": {

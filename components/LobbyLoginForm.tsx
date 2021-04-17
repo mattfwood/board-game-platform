@@ -7,7 +7,8 @@
  */
 
 import React, { useState } from 'react';
-import { usePlayer } from '../hooks/usePlayer';
+import { v4 as uuid } from 'uuid';
+import { Player, usePlayer } from '../hooks/usePlayer';
 
 type LoginFormProps = {
   playerName?: string;
@@ -26,7 +27,10 @@ const LobbyLoginForm = (props: LoginFormProps) => {
 
   function handleSubmit(e) {
     e.preventDefault();
-    setPlayer({ name: playerName });
+    setPlayer({
+      id: uuid(),
+      name: playerName,
+    });
     if (props.onEnter) {
       props?.onEnter(playerName);
     }

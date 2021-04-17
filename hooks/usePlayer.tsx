@@ -2,7 +2,8 @@ import Cookies from 'react-cookies';
 import { useEffect } from 'react';
 import { atom, useRecoilState } from 'recoil';
 
-type Player = {
+export type Player = {
+  id: string;
   name?: string;
 };
 
@@ -12,11 +13,11 @@ const playerState = atom<Player>({
 });
 
 export const usePlayer = () => {
-  const [player, setPlayer] = useRecoilState(playerState);
+  const [player, setPlayer] = useRecoilState<Player>(playerState);
 
   useEffect(() => {
     Cookies.save('playerState', player);
   }, [player]);
 
-  return [player, setPlayer];
+  return [player, setPlayer] as const;
 };

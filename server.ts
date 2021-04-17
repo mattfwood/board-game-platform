@@ -4,4 +4,4 @@ import { TicTacToe } from './lib/Game';
 const server = Server({ games: [TicTacToe] });
 const PORT = process.env.PORT || 8000;
 
-server.run(PORT);
+server.run(PORT as number);

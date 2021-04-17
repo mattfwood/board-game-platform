@@ -33,8 +33,10 @@ const useMatch = (gameName, id) => {
       setMatch(result);
     }
 
-    getMatch();
-  }, []);
+    if (gameName && id) {
+      getMatch();
+    }
+  }, [gameName, id]);
 
   return match;
 };
@@ -53,10 +55,43 @@ export default function GameView() {
   const [player, setPlayer] = usePlayer();
   const match = useMatch(game, id);
 
-  console.log(match);
+  const freeSeat = match.players.find((player) => !player.name);
 
-  // console.log(connection);
-  // console.log(player);
-  // console.log({ game, id });
-  return <GameClient matchID={id} playerID={player.id} />;
+  const playerSeat = match?.players?.find(
+    (matchPlayer) => matchPlayer.id === player?.id
+  );
+
+  console.log({ match, player, playerSeat, freeSeat });
+
+  // player has joined, more seats are available
+  if (playerSeat && freeSeat) {
+    return (
+      <div>
+        <button>Leave Game</button>
+      </div>
+    );
+  }
+
+  // player hasn't joined, seats are available
+  if (freeSeat) {
+    return (
+      <div>
+        <button>Join Game</button>
+      </div>
+    );
+  }
+
+  // player has joined, game is full
+  if (playerSeat) {
+  }
+
+  // @TODO: player hasn't joined and game is full, but can join as a spectator
+
+  return (
+    <GameClient
+      matchID={id as string}
+      playerID={player.id}
+      credentials={player.id}
+    />
+  );
 }

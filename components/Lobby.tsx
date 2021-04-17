@@ -15,6 +15,7 @@ import { Client } from 'boardgame.io/react';
 import LobbyMatchInstance, { MatchOpts } from './LobbyMatchInstance';
 import { LobbyConnection } from './LobbyConnection';
 import withRouter from 'next/dist/client/with-router';
+import { lobbyClient } from '../pages';
 // import { LobbyConnection } from 'boardgame.io/dist/types/src/lobby/connection';
 // import { Client } from 'boardgame.io/dist/types/packages/react';
 
@@ -198,8 +199,12 @@ class BaseLobby extends React.Component<LobbyProps, LobbyState> {
 
   _createMatch = async (gameName: string, numPlayers: number) => {
     try {
-      await this.connection.create(gameName, numPlayers);
-      await this.connection.refresh();
+      const { matchID } = await lobbyClient.createMatch(gameName, {
+        numPlayers,
+      });
+      this.props.router.push(`/${gameName}/${matchID}`);
+      // const { matchId } = await this.connection.create(gameName, numPlayers);
+      // await this.connection.refresh();
       // rerender
       this.setState({});
     } catch (error) {
