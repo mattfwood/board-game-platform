@@ -66,6 +66,7 @@ export default function Home() {
   return (
     <div>
       <Lobby
+        // @ts-ignore
         gameServer={HOST}
         lobbyServer={HOST}
         gameComponents={GAME_COMPONENTS}

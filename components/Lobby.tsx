@@ -202,6 +202,7 @@ class BaseLobby extends React.Component<LobbyProps, LobbyState> {
       const { matchID } = await lobbyClient.createMatch(gameName, {
         numPlayers,
       });
+      // @ts-ignore
       this.props.router.push(`/${gameName}/${matchID}`);
       // const { matchId } = await this.connection.create(gameName, numPlayers);
       // await this.connection.refresh();
@@ -213,7 +214,6 @@ class BaseLobby extends React.Component<LobbyProps, LobbyState> {
   };
 
   _joinMatch = async (gameName: string, matchID: string, playerID: string) => {
-    console.log({ playerID });
     try {
       await this.connection.join(gameName, matchID, playerID);
       await this.connection.refresh();
@@ -221,6 +221,7 @@ class BaseLobby extends React.Component<LobbyProps, LobbyState> {
         this.connection.playerName,
         this.connection.playerCredentials
       );
+      // @ts-ignore
       this.props.router.push(`/${gameName}/${matchID}`);
     } catch (error) {
       this.setState({ errorMsg: error.message });
@@ -448,4 +449,5 @@ class BaseLobby extends React.Component<LobbyProps, LobbyState> {
   }
 }
 
+// @ts-ignore
 export default withRouter(BaseLobby);
