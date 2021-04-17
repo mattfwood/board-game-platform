@@ -6,11 +6,12 @@
  * https://opensource.org/licenses/MIT.
  */
 
-import React from 'react';
+import React, { useState } from 'react';
+import { usePlayer } from '../hooks/usePlayer';
 
 type LoginFormProps = {
   playerName?: string;
-  onEnter: (playerName: string) => void;
+  onEnter?: (playerName: string) => void;
   onCancel?: () => void;
 };
 
@@ -19,7 +20,50 @@ type LoginFormState = {
   nameErrorMsg: string;
 };
 
-class LobbyLoginForm extends React.Component<LoginFormProps, LoginFormState> {
+const LobbyLoginForm = (props: LoginFormProps) => {
+  const [player, setPlayer] = usePlayer();
+  const [playerName, setPlayerName] = useState('');
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    setPlayer({ name: playerName });
+    if (props.onEnter) {
+      props?.onEnter(playerName);
+    }
+  }
+
+  return (
+    <div>
+      <p className="phase-title">Choose a player name:</p>
+      <form className="flex space-x-2" onSubmit={handleSubmit}>
+        <input
+          type="text"
+          onChange={(e) => setPlayerName(e.target.value)}
+          value={playerName}
+        />
+        <button className="buttons" type="submit">
+          Enter
+        </button>
+        {Boolean(props.onCancel) && (
+          <button
+            type="button"
+            className="btn-secondary"
+            onClick={props.onCancel}
+          >
+            Cancel
+          </button>
+        )}
+      </form>
+      <br />
+      {/* <span className="error-msg">
+          {this.state.nameErrorMsg}
+          <br />
+        </span> */}
+    </div>
+  );
+};
+
+class LobbyLoginForm2 extends React.Component<LoginFormProps, LoginFormState> {
   static defaultProps = {
     playerName: '',
   };

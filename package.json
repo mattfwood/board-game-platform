@@ -19,7 +19,8 @@
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
     "react-cookies": "^0.1.1",
-    "react-dom": "^16.13.1"
+    "react-dom": "^16.13.1",
+    "recoil": "^0.2.0"
   },
   "license": "MIT",
   "devDependencies": {

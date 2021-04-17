@@ -14,6 +14,7 @@ import { Client } from 'boardgame.io/react';
 // import { LobbyConnection } from 'boardgame.io/client';
 import LobbyMatchInstance, { MatchOpts } from './LobbyMatchInstance';
 import { LobbyConnection } from './LobbyConnection';
+import withRouter from 'next/dist/client/with-router';
 // import { LobbyConnection } from 'boardgame.io/dist/types/src/lobby/connection';
 // import { Client } from 'boardgame.io/dist/types/packages/react';
 
@@ -98,7 +99,7 @@ type LobbyState = {
  *   A React component that provides a UI to create, list, join, leave, play or
  *   spectate matches (game instances).
  */
-export class Lobby extends React.Component<LobbyProps, LobbyState> {
+class BaseLobby extends React.Component<LobbyProps, LobbyState> {
   static propTypes = {
     gameComponents: PropTypes.array.isRequired,
     lobbyServer: PropTypes.string,
@@ -207,6 +208,7 @@ export class Lobby extends React.Component<LobbyProps, LobbyState> {
   };
 
   _joinMatch = async (gameName: string, matchID: string, playerID: string) => {
+    console.log({ playerID });
     try {
       await this.connection.join(gameName, matchID, playerID);
       await this.connection.refresh();
@@ -214,6 +216,7 @@ export class Lobby extends React.Component<LobbyProps, LobbyState> {
         this.connection.playerName,
         this.connection.playerCredentials
       );
+      this.props.router.push(`/${gameName}/${matchID}`);
     } catch (error) {
       this.setState({ errorMsg: error.message });
     }
@@ -337,7 +340,6 @@ export class Lobby extends React.Component<LobbyProps, LobbyState> {
         </div>
 
         <div className={this._getPhaseVisibility(LobbyPhases.LIST)}>
-          <p>Welcome, {playerName}</p>
           <section aria-labelledby="profile-overview-title" className="mb-4">
             <div className="rounded-lg bg-white overflow-hidden shadow">
               <h2 className="sr-only" id="profile-overview-title">
@@ -440,3 +442,5 @@ export class Lobby extends React.Component<LobbyProps, LobbyState> {
     );
   }
 }
+
+export default withRouter(BaseLobby);

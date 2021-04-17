@@ -6,14 +6,14 @@ import { TicTacToeBoard } from '../components/Board';
 import { LobbyClient } from 'boardgame.io/client';
 import { useAsync } from '../hooks/useAsync';
 import React from 'react';
-import { Lobby } from '../components/Lobby';
+import Lobby from '../components/Lobby';
 
 const isDev = process.env.NODE_ENV !== 'production';
-const HOST = isDev
+export const HOST = isDev
   ? 'http://localhost:8000'
   : 'https://board-game-backend.herokuapp.com';
 
-const lobbyClient = new LobbyClient({ server: HOST });
+export const lobbyClient = new LobbyClient({ server: HOST });
 
 const asyncFunction = async () => {
   const result = await lobbyClient.listGames();
@@ -57,6 +57,8 @@ class App extends React.Component {
   }
 }
 
+export const GAME_COMPONENTS = [{ game: TicTacToe, board: TicTacToeBoard }];
+
 export default function Home() {
   const result = useLobby();
 
@@ -66,7 +68,7 @@ export default function Home() {
       <Lobby
         gameServer={HOST}
         lobbyServer={HOST}
-        gameComponents={[{ game: TicTacToe, board: TicTacToeBoard }]}
+        gameComponents={GAME_COMPONENTS}
       />
     </div>
   );
