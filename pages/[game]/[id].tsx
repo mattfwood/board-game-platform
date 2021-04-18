@@ -79,10 +79,11 @@ const useMatch = () => {
   const result = useSWR(`${HOST}/games/${gameName}/${id}`, {
     refreshInterval: 2000,
   });
+
   const [match, setMatch] = useRecoilState(matchState);
   const [player, setPlayer] = usePlayer();
 
-  // console.log({ result });
+  console.log({ result });
 
   async function getMatch() {
     const result = await lobbyClient.getMatch(gameName as string, id as string);
