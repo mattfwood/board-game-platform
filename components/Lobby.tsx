@@ -346,7 +346,7 @@ class BaseLobby extends React.Component<LobbyProps, LobbyState> {
     console.log(this.connection.matches);
 
     return (
-      <div id="lobby-view" style={{ padding: 50 }}>
+      <div id="lobby-view">
         <div className={this._getPhaseVisibility(LobbyPhases.ENTER)}>
           <LobbyLoginForm
             // onCancel={() => {}}

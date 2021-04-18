@@ -75,14 +75,15 @@ class LobbyCreateMatchForm extends React.Component<
 
   render() {
     return (
-      <div>
+      <div className="flex">
         <form
           onSubmit={(e) => {
             e.preventDefault();
             this.onClickCreate();
           }}
+          className="w-full max-w-screen-sm mx-auto"
         >
-          <div className="shadow sm:rounded-md sm:overflow-hidden">
+          <div className="w-full shadow sm:rounded-md sm:overflow-hidden">
             <div className="bg-white py-6 px-4 space-y-6 sm:p-6">
               <div>
                 <h3 className="text-lg leading-6 font-medium text-gray-900">
