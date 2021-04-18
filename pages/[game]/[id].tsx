@@ -4,6 +4,7 @@ import { Client } from 'boardgame.io/react';
 import { useRouter } from 'next/dist/client/router';
 import React, { useEffect, useReducer, useRef, useState } from 'react';
 import { atom, useRecoilState } from 'recoil';
+import useSWR from 'swr';
 import { GAME_COMPONENTS, HOST, lobbyClient } from '..';
 import { TicTacToeBoard } from '../../components/Board';
 import Lobby, { RendererProps } from '../../components/Lobby';
@@ -15,8 +16,7 @@ const GameLobby = () => {
   const {
     query: { game, id },
   } = useRouter();
-  // const { connection, refreshLobby } = useLobbyConnection();
-  const { match, refetchMatch } = useMatch(game, id);
+  const { match, refetchMatch } = useMatch();
   const [player, setPlayer] = usePlayer();
   const freeSeat = match?.players?.find((player) => !player?.name);
 
@@ -112,12 +112,20 @@ const matchState = atom({
   default: null,
 });
 
-const useMatch = (gameName, id) => {
+const useMatch = () => {
+  const {
+    query: { game: gameName, id },
+  } = useRouter();
+  const result = useSWR(`${HOST}/games/${gameName}/${id}`, {
+    refreshInterval: 2000,
+  });
   const [match, setMatch] = useRecoilState(matchState);
   const [player, setPlayer] = usePlayer();
 
+  console.log({ result });
+
   async function getMatch() {
-    const result = await lobbyClient.getMatch(gameName, id);
+    const result = await lobbyClient.getMatch(gameName as string, id as string);
     setMatch(result);
   }
 
@@ -159,9 +167,8 @@ export default function GameView() {
   const {
     query: { game, id },
   } = useRouter();
-  // const connection = useLobbyConnection();
   const [player, setPlayer] = usePlayer();
-  const { match } = useMatch(game, id);
+  const { match } = useMatch();
 
   console.log({ player });
 
@@ -265,6 +272,7 @@ export default function GameView() {
           ))}
         </ul>
       </div>
+
       <GameClient
         matchID={id as string}
         playerID={player.id}
