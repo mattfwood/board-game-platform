@@ -263,7 +263,7 @@ export default function GameView() {
           );
         }}
       /> */}
-      <GameLobby match={match} />
+      <GameLobby />
       <div>
         <h4 className="text-2xl font-bold">Players</h4>
         <ul>

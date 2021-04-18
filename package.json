@@ -40,15 +40,13 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": "lint-staged",
+      "pre-push": "tsc --noEmit"
     }
   },
   "lint-staged": {
-    "*.js": [
+    "*.{js,ts,tsx}": [
       "eslint --fix"
-    ],
-    "{app,test}/**/*.rb": [
-      "bundle exec rubocop -a"
     ]
   }
 }
