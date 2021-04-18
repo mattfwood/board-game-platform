@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { atom, useRecoilState } from 'recoil';
 
 export type Player = {
-  id: string;
+  id?: string;
   name?: string;
 };
 

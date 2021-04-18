@@ -28,7 +28,7 @@ const LobbyLoginForm = (props: LoginFormProps) => {
   function handleSubmit(e) {
     e.preventDefault();
     setPlayer({
-      id: uuid(),
+      // id: uuid(),
       name: playerName,
     });
     if (props.onEnter) {

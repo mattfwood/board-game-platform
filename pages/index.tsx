@@ -70,6 +70,11 @@ export default function Home() {
         gameServer={HOST}
         lobbyServer={HOST}
         gameComponents={GAME_COMPONENTS}
+        // renderer={(props) => {
+        //   console.log(props);
+
+        //   return <div>lobby</div>;
+        // }}
       />
     </div>
   );

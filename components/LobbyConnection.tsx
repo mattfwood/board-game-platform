@@ -129,7 +129,10 @@ class _LobbyConnectionImpl {
         numPlayers > comp.game.maxPlayers
       )
         throw new Error('invalid number of players ' + numPlayers);
-      await this.client.createMatch(gameName, { numPlayers });
+      const { matchID } = await this.client.createMatch(gameName, {
+        numPlayers,
+      });
+      return matchID;
     } catch (error) {
       throw new Error(
         'failed to create match for ' + gameName + ' (' + error + ')'

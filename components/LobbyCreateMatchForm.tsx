@@ -88,9 +88,6 @@ class LobbyCreateMatchForm extends React.Component<
                 <h3 className="text-lg leading-6 font-medium text-gray-900">
                   Create a Match
                 </h3>
-                {/* <p className="mt-1 text-sm text-gray-500">
-                  Provide basic informtion about the job. Be specific with the job title.
-                </p> */}
               </div>
 
               <fieldset>

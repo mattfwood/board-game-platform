@@ -1,5 +1,7 @@
 module.exports = {
   extends: ['cratebind'],
-  rules: {},
+  rules: {
+    'import/no-unresolved': 0,
+  },
   settings: {},
 };

@@ -44,6 +44,27 @@ type RunningMatch = {
   credentials?: string;
 };
 
+export type RendererProps = {
+  errorMsg: string;
+  gameComponents: GameComponent[];
+  matches: LobbyAPI.MatchList['matches'];
+  phase: LobbyPhases;
+  playerName: string;
+  runningMatch?: RunningMatch;
+  handleEnterLobby: (playerName: string) => void;
+  handleExitLobby: () => Promise<void>;
+  handleCreateMatch: (gameName: string, numPlayers: number) => Promise<void>;
+  handleJoinMatch: (
+    gameName: string,
+    matchID: string,
+    playerID: string
+  ) => Promise<void>;
+  handleLeaveMatch: (gameName: string, matchID: string) => Promise<void>;
+  handleExitMatch: () => void;
+  handleRefreshMatches: () => Promise<void>;
+  handleStartMatch: (gameName: string, matchOpts: MatchOpts) => void;
+};
+
 type LobbyProps = {
   gameComponents: GameComponent[];
   lobbyServer?: string;
@@ -51,26 +72,7 @@ type LobbyProps = {
   debug?: DebugOpt | boolean;
   clientFactory?: typeof Client;
   refreshInterval?: number;
-  renderer?: (args: {
-    errorMsg: string;
-    gameComponents: GameComponent[];
-    matches: LobbyAPI.MatchList['matches'];
-    phase: LobbyPhases;
-    playerName: string;
-    runningMatch?: RunningMatch;
-    handleEnterLobby: (playerName: string) => void;
-    handleExitLobby: () => Promise<void>;
-    handleCreateMatch: (gameName: string, numPlayers: number) => Promise<void>;
-    handleJoinMatch: (
-      gameName: string,
-      matchID: string,
-      playerID: string
-    ) => Promise<void>;
-    handleLeaveMatch: (gameName: string, matchID: string) => Promise<void>;
-    handleExitMatch: () => void;
-    handleRefreshMatches: () => Promise<void>;
-    handleStartMatch: (gameName: string, matchOpts: MatchOpts) => void;
-  }) => JSX.Element;
+  renderer?: (args: RendererProps) => JSX.Element;
 };
 
 type LobbyState = {
@@ -199,9 +201,13 @@ class BaseLobby extends React.Component<LobbyProps, LobbyState> {
 
   _createMatch = async (gameName: string, numPlayers: number) => {
     try {
-      const { matchID } = await lobbyClient.createMatch(gameName, {
-        numPlayers,
-      });
+      const matchID = await this.connection.create(gameName, numPlayers);
+      // const { matchID } = await lobbyClient.createMatch(gameName, {
+      //   numPlayers,
+      // });
+      // await this.connection.refresh();
+
+      // console.log({ result });
       // @ts-ignore
       this.props.router.push(`/${gameName}/${matchID}`);
       // const { matchId } = await this.connection.create(gameName, numPlayers);
@@ -215,6 +221,7 @@ class BaseLobby extends React.Component<LobbyProps, LobbyState> {
 
   _joinMatch = async (gameName: string, matchID: string, playerID: string) => {
     try {
+      console.log({ gameName, matchID, playerID });
       await this.connection.join(gameName, matchID, playerID);
       await this.connection.refresh();
       this._updateCredentials(
@@ -222,7 +229,7 @@ class BaseLobby extends React.Component<LobbyProps, LobbyState> {
         this.connection.playerCredentials
       );
       // @ts-ignore
-      this.props.router.push(`/${gameName}/${matchID}`);
+      // this.props.router.push(`/${gameName}/${matchID}`);
     } catch (error) {
       this.setState({ errorMsg: error.message });
     }
@@ -315,6 +322,8 @@ class BaseLobby extends React.Component<LobbyProps, LobbyState> {
     const { gameComponents, renderer } = this.props;
     const { errorMsg, playerName, phase, runningMatch } = this.state;
 
+    console.log({ connection: this.connection });
+
     if (renderer) {
       return renderer({
         errorMsg,
@@ -333,6 +342,8 @@ class BaseLobby extends React.Component<LobbyProps, LobbyState> {
         handleStartMatch: this._startMatch,
       });
     }
+
+    console.log(this.connection.matches);
 
     return (
       <div id="lobby-view" style={{ padding: 50 }}>
