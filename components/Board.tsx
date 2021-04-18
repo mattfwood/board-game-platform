@@ -1,7 +1,6 @@
 import React, { CSSProperties } from 'react';
 
 export function TicTacToeBoard(props) {
-  console.log({ props });
   function onClick(id) {
     props.moves.clickCell(id);
   }

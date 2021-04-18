@@ -4,6 +4,7 @@ import { atom, useRecoilState } from 'recoil';
 
 export type Player = {
   id?: string;
+  credentials?: string;
   name?: string;
 };
 

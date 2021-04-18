@@ -3,6 +3,7 @@ import { SocketIO } from 'boardgame.io/multiplayer';
 import { Client } from 'boardgame.io/react';
 import { useRouter } from 'next/dist/client/router';
 import React, { useEffect, useReducer, useRef, useState } from 'react';
+import { atom, useRecoilState } from 'recoil';
 import { GAME_COMPONENTS, HOST, lobbyClient } from '..';
 import { TicTacToeBoard } from '../../components/Board';
 import Lobby, { RendererProps } from '../../components/Lobby';
@@ -10,11 +11,12 @@ import { LobbyConnection } from '../../components/LobbyConnection';
 import { usePlayer } from '../../hooks/usePlayer';
 import { TicTacToe } from '../../lib/Game';
 
-const GameLobby = ({ match }: { match: LobbyAPI.Match }) => {
+const GameLobby = () => {
   const {
     query: { game, id },
   } = useRouter();
-  const { connection, refreshLobby } = useLobbyConnection();
+  // const { connection, refreshLobby } = useLobbyConnection();
+  const { match, refetchMatch } = useMatch(game, id);
   const [player, setPlayer] = usePlayer();
   const freeSeat = match?.players?.find((player) => !player?.name);
 
@@ -22,7 +24,7 @@ const GameLobby = ({ match }: { match: LobbyAPI.Match }) => {
     (matchPlayer) => matchPlayer?.id === player?.id
   );
 
-  console.log({ connection });
+  console.log({ match });
 
   // player has joined, more seats are available
   if (playerSeat && freeSeat) {
@@ -39,13 +41,22 @@ const GameLobby = ({ match }: { match: LobbyAPI.Match }) => {
       <div>
         <button
           onClick={async () => {
-            await connection.join(
+            const { playerCredentials } = await lobbyClient.joinMatch(
               game as string,
               id as string,
-              String(freeSeat.id)
+              {
+                playerName: player.name,
+                playerID: String(freeSeat.id),
+              }
             );
 
-            await refreshLobby();
+            setPlayer((prev) => ({
+              ...prev,
+              id: String(freeSeat.id),
+              credentials: playerCredentials,
+            }));
+
+            await refetchMatch();
           }}
         >
           Join Game
@@ -61,55 +72,81 @@ const GameLobby = ({ match }: { match: LobbyAPI.Match }) => {
   return <div>Actions</div>;
 };
 
-const useLobbyConnection = () => {
-  const [player] = usePlayer();
-  const [ignored, forceUpdate] = useReducer((x) => x + 1, 0);
+// const useLobbyConnection = () => {
+//   const [player] = usePlayer();
+//   const [ignored, forceUpdate] = useReducer((x) => x + 1, 0);
 
-  const connection = useRef<ReturnType<typeof LobbyConnection> | null>(null);
+//   const connection = useRef<ReturnType<typeof LobbyConnection> | null>(null);
 
-  async function refreshLobby() {
-    if (connection.current) {
-      await connection.current.refresh();
-      forceUpdate();
-    }
-  }
+//   async function refreshLobby() {
+//     if (connection.current) {
+//       await connection.current.refresh();
 
-  async function joinGame() {}
+//       connection.current = connection.current;
+//     }
+//   }
 
-  useEffect(() => {
-    const lobbyConnection = LobbyConnection({
-      server: HOST,
-      gameComponents: GAME_COMPONENTS,
-      playerName: player.name,
-      // playerCredentials: player.id,
-    });
+//   async function joinGame() {}
 
-    connection.current = lobbyConnection;
+//   useEffect(() => {
+//     const lobbyConnection = LobbyConnection({
+//       server: HOST,
+//       gameComponents: GAME_COMPONENTS,
+//       playerName: player.name,
+//       // playerCredentials: player.id,
+//     });
 
-    refreshLobby();
-  }, [player.name]);
+//     connection.current = lobbyConnection;
 
-  return {
-    connection: connection?.current || null,
-    refreshLobby,
-  };
-};
+//     refreshLobby();
+//   }, [player.name]);
+
+//   return {
+//     connection: connection?.current || null,
+//     refreshLobby,
+//   };
+// };
+
+const matchState = atom({
+  key: 'match',
+  default: null,
+});
 
 const useMatch = (gameName, id) => {
-  const [match, setMatch] = useState(null);
+  const [match, setMatch] = useRecoilState(matchState);
+  const [player, setPlayer] = usePlayer();
+
+  async function getMatch() {
+    const result = await lobbyClient.getMatch(gameName, id);
+    setMatch(result);
+  }
+
+  async function joinMatch(gameName, gameID, playerID) {
+    const { playerCredentials } = await lobbyClient.joinMatch(
+      gameName,
+      gameID,
+      {
+        playerName: player.name,
+        playerID: String(playerID),
+      }
+    );
+
+    setPlayer((prev) => ({
+      ...prev,
+      id: String(playerID),
+      credentials: playerCredentials,
+    }));
+
+    await getMatch();
+  }
 
   useEffect(() => {
-    async function getMatch() {
-      const result = await lobbyClient.getMatch(gameName, id);
-      setMatch(result);
-    }
-
     if (gameName && id) {
       getMatch();
     }
   }, [gameName, id]);
 
-  return match;
+  return { match, refetchMatch: getMatch, joinMatch };
 };
 
 const GameClient = Client({
@@ -124,7 +161,9 @@ export default function GameView() {
   } = useRouter();
   // const connection = useLobbyConnection();
   const [player, setPlayer] = usePlayer();
-  const match = useMatch(game, id);
+  const { match } = useMatch(game, id);
+
+  console.log({ player });
 
   // const freeSeat = match?.players?.find((player) => !player?.name);
 
@@ -229,7 +268,7 @@ export default function GameView() {
       <GameClient
         matchID={id as string}
         playerID={player.id}
-        credentials={player.id}
+        credentials={player.credentials}
       />
     </>
   );

@@ -7,8 +7,6 @@ import '../styles/tailwind.css';
 const Container = ({ children }) => {
   const [player] = usePlayer();
 
-  console.log({ player });
-
   if (!player) {
     return (
       <div className="rounded-lg bg-white overflow-hidden shadow p-6">
