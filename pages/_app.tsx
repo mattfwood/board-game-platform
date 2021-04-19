@@ -7,15 +7,19 @@ import '../styles/tailwind.css';
 const Container = ({ children }) => {
   const [player] = usePlayer();
 
-  if (!player) {
-    return (
-      <div className="rounded-lg bg-white overflow-hidden shadow p-6">
-        <LobbyLoginForm />
-      </div>
-    );
-  }
-
-  return children;
+  return (
+    <div>
+      {!player ? (
+        <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+          <div>
+            <LobbyLoginForm />
+          </div>
+        </div>
+      ) : (
+        <div>{children}</div>
+      )}
+    </div>
+  );
 };
 
 const App = ({ Component, pageProps }: AppProps) => {

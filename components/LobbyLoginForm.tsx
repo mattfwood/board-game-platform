@@ -7,8 +7,7 @@
  */
 
 import React, { useState } from 'react';
-import { v4 as uuid } from 'uuid';
-import { Player, usePlayer } from '../hooks/usePlayer';
+import { usePlayer } from '../hooks/usePlayer';
 
 type LoginFormProps = {
   playerName?: string;
@@ -28,7 +27,6 @@ const LobbyLoginForm = (props: LoginFormProps) => {
   function handleSubmit(e) {
     e.preventDefault();
     setPlayer({
-      // id: uuid(),
       name: playerName,
     });
     if (props.onEnter) {
@@ -38,13 +36,25 @@ const LobbyLoginForm = (props: LoginFormProps) => {
 
   return (
     <div>
-      <p className="phase-title">Choose a player name:</p>
-      <form className="flex space-x-2" onSubmit={handleSubmit}>
-        <input
-          type="text"
-          onChange={(e) => setPlayerName(e.target.value)}
-          value={playerName}
-        />
+      <form className="flex space-x-2 items-end" onSubmit={handleSubmit}>
+        <div className="w-full">
+          <label
+            htmlFor="displayName"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Display Name
+          </label>
+          <div className="mt-1">
+            <input
+              value={player?.name ?? playerName}
+              onChange={(e) => setPlayerName(e.target.value)}
+              id="displayName"
+              name="displayName"
+              required
+              className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            />
+          </div>
+        </div>
         <button className="buttons" type="submit">
           Enter
         </button>
@@ -58,7 +68,6 @@ const LobbyLoginForm = (props: LoginFormProps) => {
           </button>
         )}
       </form>
-      <br />
       {/* <span className="error-msg">
           {this.state.nameErrorMsg}
           <br />

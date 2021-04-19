@@ -1,7 +1,6 @@
 import React, { CSSProperties } from 'react';
 
 export function TicTacToeBoard(props) {
-  console.log(props);
   function onClick(id) {
     props.moves.clickCell(id);
   }
@@ -44,7 +43,7 @@ export function TicTacToeBoard(props) {
         <tbody>{tbody}</tbody>
       </table>
       {winner}
-      {Boolean(winner) && <button onClick={props.reset}>Reset Game</button>}
+      {/* {Boolean(winner) && <button onClick={props.reset}>Reset Game</button>} */}
     </div>
   );
 }
