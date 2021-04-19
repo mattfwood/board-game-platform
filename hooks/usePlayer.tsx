@@ -17,7 +17,9 @@ export const usePlayer = () => {
   const [player, setPlayer] = useRecoilState<Player>(playerState);
 
   useEffect(() => {
-    Cookies.save('playerState', player, { path: '/' });
+    if (player !== null) {
+      Cookies.save('playerState', player, { path: '/' });
+    }
   }, [player]);
 
   return [player, setPlayer] as const;
